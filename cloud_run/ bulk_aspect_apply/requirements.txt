@@ -1,0 +1,11 @@
+pandas
+pyyaml
+requests
+google-auth
+google-cloud-storage
+google-cloud-bigquery
+urllib3
+protobuf
+google-cloud-dataplex
+db-dtypes
+google-cloud-bigquery-storage
