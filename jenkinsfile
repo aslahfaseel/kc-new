@@ -1,0 +1,58 @@
+pipeline {
+    agent none
+
+    options {
+        ansiColor('xterm')
+    }
+
+    environment {
+        // Label for the Jenkins runner (Identity A)
+        // Make sure to add your actual label name back in here if needed!
+        build_label_name = 'AID.KEIV.BuildAgent003' 
+    }
+
+    stages {
+        stage("Knowledge Catalog CI/CD Pipeline") {
+            agent {
+                label env.build_label_name
+            }
+
+            steps {
+                echo "Starting Deployment for vz_knowledge_catalog_automation"
+
+                script {
+                    // Restricting to dev branch as requested
+                    if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'Feature_Terraform_CICD') {
+                        echo "Valid branch detected: ${env.BRANCH_NAME}"
+
+                        // 1. Set up the environment paths based on your new runner
+                        env.JAVA_HOME="/usr/lib/jvm/java-25-openjdk"
+                        env.M2_HOME="/opt/apache-maven-3.9.16"
+                        env.GCP_HOME="/apps/opt/application/google-cloud-sdk"
+                        env.PATH="${env.JAVA_HOME}/bin:${env.M2_HOME}/bin:${env.GCP_HOME}/bin:${env.PATH}"
+                        
+                        // 2. Capture the short Git commit hash (first 7 characters)
+                        // Adding a fallback to "latest" just in case the variable is missing locally
+                        def shortCommit = env.GIT_COMMIT ? env.GIT_COMMIT.take(7) : "latest"
+                        echo "Using Git Commit Hash for image tag: ${shortCommit}"
+
+                        // 3. Build and Push the Docker Images FIRST
+                        echo "Building Cloud Run Docker images..."
+                        sh """
+                        sh ${WORKSPACE}/build_images.sh ${WORKSPACE} ${shortCommit}
+                        """
+
+                        // 4. Run the Terraform Deployment SECOND
+                        echo "Deploying Infrastructure..."
+                        sh """
+                        sh ${WORKSPACE}/deploy_catalog.sh ${WORKSPACE} ${env.BRANCH_NAME} ${shortCommit}
+                        """
+
+                    } else {
+                        echo "Branch is ${env.BRANCH_NAME}. Skipping deployment."
+                    }
+                }
+            }
+        }
+    }    
+}
