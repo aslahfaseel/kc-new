@@ -1,5 +1,0 @@
-argparse
-protobuf
-google-cloud-dataplex
-google-cloud-bigquery
-google-auth

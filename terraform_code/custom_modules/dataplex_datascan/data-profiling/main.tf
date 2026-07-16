@@ -1,4 +1,4 @@
-
+﻿
 resource "google_dataplex_datascan" "profiling" {
   project      = var.project_id
   location     = var.location

@@ -1,4 +1,4 @@
-locals {
+﻿locals {
   bq_prefix             = "//bigquery.googleapis.com/projects/${var.project_id}"
   dq_results_table      = "${local.bq_prefix}/datasets/gcp_governance_tbls/tables/data_quality_results"
   profile_results_table = "${local.bq_prefix}/datasets/gcp_governance_tbls/tables/data_profiling_results"
@@ -130,7 +130,7 @@ data "google_storage_bucket_object_content" "profile_dq_csv" {
 locals {
   rule_library = merge(local.prebuilt_rules, local.custom_rules)
 
-  # ── profiling.csv → profiling scan per table ──────────────────────────────
+  # ΓöÇΓöÇ profiling.csv ΓåÆ profiling scan per table ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
   profiling_raw = csvdecode(data.google_storage_bucket_object_content.profiling_csv.content)
 
   profiling_to_scan = {
@@ -143,7 +143,7 @@ locals {
     }
   }
 
-  # ── custom_dq.csv → custom DQ scan per table ─────────────────────────────
+  # ΓöÇΓöÇ custom_dq.csv ΓåÆ custom DQ scan per table ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
   custom_dq_raw = csvdecode(data.google_storage_bucket_object_content.custom_dq_csv.content)
 
   custom_dq_to_scan = {
@@ -158,8 +158,8 @@ locals {
     }
   }
 
-  # ── profile_based_dq.csv → profile-based DQ scan per table ───────────────
-  # Scan IDs are AUTO-BUILT from dataset + table — no hardcoding needed
+  # ΓöÇΓöÇ profile_based_dq.csv ΓåÆ profile-based DQ scan per table ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  # Scan IDs are AUTO-BUILT from dataset + table ΓÇö no hardcoding needed
   profile_dq_raw = csvdecode(data.google_storage_bucket_object_content.profile_dq_csv.content)
 
   profile_based_scans = {

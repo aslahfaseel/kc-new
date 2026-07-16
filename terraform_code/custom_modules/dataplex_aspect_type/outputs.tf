@@ -1,4 +1,4 @@
-output "aspect_type_name" {
+﻿output "aspect_type_name" {
   value = google_dataplex_aspect_type.this.name
 }
 

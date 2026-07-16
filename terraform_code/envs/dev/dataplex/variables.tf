@@ -36,5 +36,3 @@ variable "gcs_bucket_name" {
   type        = string
   default     = "vz-datacatalog"
 }
-
-#testing cicd.....

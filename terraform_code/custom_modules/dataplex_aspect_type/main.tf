@@ -1,4 +1,4 @@
-resource "google_dataplex_aspect_type" "this" {
+﻿resource "google_dataplex_aspect_type" "this" {
   project           = var.project_id
   location          = var.location
   aspect_type_id    = var.aspect_type_id

@@ -1,4 +1,4 @@
-variable "project_id" {
+﻿variable "project_id" {
   type = string
 }
 
@@ -55,7 +55,7 @@ variable "service_account_email" {
   description = "Custom service account email to run the scan. Defaults to the Dataplex Service Agent."
 }
 
-# DQ rules — supports static (row_condition_sql) and all 9 profile-based rule types
+# DQ rules ΓÇö supports static (row_condition_sql) and all 9 profile-based rule types
 variable "dq_rules" {
   type = list(object({
     name                       = string
@@ -65,18 +65,18 @@ variable "dq_rules" {
     column                     = optional(string, null)
     ignore_null                = optional(bool, null)
 
-    # ── Static rule types ──────────────────────────────────────────────────
+    # ΓöÇΓöÇ Static rule types ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     row_condition_sql           = optional(string, null)
     table_condition_sql         = optional(string, null)
     sql_assertion               = optional(string, null)
     regex                       = optional(string, null)
     allowed_values              = optional(list(string), null)
 
-    # ── Profile-proposed flag types ────────────────────────────────────────
+    # ΓöÇΓöÇ Profile-proposed flag types ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     non_null_expectation        = optional(bool, false)
     uniqueness_expectation      = optional(bool, false)
 
-    # ── Object rule types ──────────────────────────────────────────────────
+    # ΓöÇΓöÇ Object rule types ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     range_expectation = optional(object({
       min_value          = optional(string, null)
       max_value          = optional(string, null)

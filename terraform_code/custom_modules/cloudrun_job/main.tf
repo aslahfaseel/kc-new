@@ -1,4 +1,4 @@
-resource "google_cloud_run_v2_job" "job" {
+﻿resource "google_cloud_run_v2_job" "job" {
   name     = var.job_name
   location = var.location
   project  = var.project_id

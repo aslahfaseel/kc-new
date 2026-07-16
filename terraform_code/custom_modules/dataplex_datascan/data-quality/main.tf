@@ -1,4 +1,4 @@
-resource "google_dataplex_datascan" "quality" {
+﻿resource "google_dataplex_datascan" "quality" {
   project      = var.project_id
   location     = var.location
   data_scan_id = var.data_scan_id

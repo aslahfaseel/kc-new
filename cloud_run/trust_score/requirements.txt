@@ -1,4 +1,0 @@
-google-cloud-bigquery
-google-cloud-dataplex
-google-cloud-storage
-protobuf

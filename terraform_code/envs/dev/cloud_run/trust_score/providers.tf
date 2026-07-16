@@ -1,4 +1,4 @@
-terraform {
+﻿terraform {
   required_version = ">= 1.5.0"
   required_providers {
     google = {
@@ -13,7 +13,7 @@ terraform {
 
   backend "gcs" {
     bucket = "aspect-application-poc-bucket"
-    prefix = "vz/cloud_run/dev/bulk_aspect_apply" # Unique state path for this app
+    prefix = "vz/cloud_run/dev/trust_score" # Unique state path for this app
   }
 }
 
