@@ -1,0 +1,13 @@
+{
+  "PROJECT_ID": "vz-it-np-keiv-dev-dpev-0",
+  "LOCATION": "us",
+  "DQ_DATASET": "gcp_governance_tbls",
+  "DQ_TABLE": "data_quality_results",
+  "GOVERNANCE_ASPECT_TYPE": "projects/vz-it-np-keiv-dev-dpev-0/locations/us/aspectTypes/data-governance",
+  "TRUST_ASPECT_TYPE": "projects/vz-it-np-keiv-dev-dpev-0/locations/us/aspectTypes/data-trustability",
+  "LOCAL_CSV_PATH": "table_list.csv",
+  "LOCAL_JSON_PATH": "dq_thresholds.json",
+  "GCS_BUCKET_NAME": "aspect-application-poc-bucket",
+  "GCS_FOLDER_PATH": "trust_score_files"
+  
+}
