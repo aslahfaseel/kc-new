@@ -112,10 +112,10 @@ module "aspect_type_data_trustability" {
   })
 }
 
-data "google_storage_bucket_object_content" "profiling_csv" {
-  name   = "profiling.csv"
-  bucket = var.gcs_bucket_name
-}
+#data "google_storage_bucket_object_content" "profiling_csv" {
+#  name   = "profiling.csv"
+#  bucket = var.gcs_bucket_name
+#}
 
 data "google_storage_bucket_object_content" "custom_dq_csv" {
   name   = "custom_dq.csv"
@@ -131,17 +131,17 @@ locals {
   rule_library = merge(local.prebuilt_rules, local.custom_rules)
 
   # ΓöÇΓöÇ profiling.csv ΓåÆ profiling scan per table ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
-  profiling_raw = csvdecode(data.google_storage_bucket_object_content.profiling_csv.content)
+  # profiling_raw = csvdecode(data.google_storage_bucket_object_content.profiling_csv.content)
 
-  profiling_to_scan = {
-    for row in local.profiling_raw :
-    row.table_key => {
-      project_id      = row.project_id
-      dataset         = row.dataset
-      table           = row.table
-      exclude_columns = lookup(row, "exclude_columns", "") == "" ? [] : [for f in split(";", lookup(row, "exclude_columns", "")) : trimspace(f)]
-    }
-  }
+  #profiling_to_scan = {
+  #  for row in local.profiling_raw :
+  # row.table_key => {
+  #      project_id      = row.project_id
+  #      dataset         = row.dataset
+  #      table           = row.table
+  #      exclude_columns = lookup(row, "exclude_columns", "") == "" ? [] : [for f in split(";", lookup(row, "exclude_columns", "")) : trimspace(f)]
+  #    }
+  #}
 
   # ΓöÇΓöÇ custom_dq.csv ΓåÆ custom DQ scan per table ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
   custom_dq_raw = csvdecode(data.google_storage_bucket_object_content.custom_dq_csv.content)
@@ -152,6 +152,7 @@ locals {
       project_id = row.project_id
       dataset    = row.dataset
       table      = row.table
+      location   = lookup(row, "location", var.location) # per-table location from CSV, fallback to var.location
       dq_rules = row.dq_rules == "" ? [] : [
         for rule_name in split(";", row.dq_rules) : local.rule_library[trimspace(rule_name)]
       ]
@@ -166,7 +167,7 @@ locals {
     for row in local.profile_dq_raw :
     row.table => {
       project_id               = row.project_id
-      region                   = var.region
+      region                   = lookup(row, "location", var.region) # per-table location from CSV, fallback to var.region
       dataset_id               = row.dataset
       table_id                 = row.table
       existing_profile_scan_id = "${replace(row.dataset, "_", "-")}-${replace(row.table, "_", "-")}-data-profile-scan"
@@ -175,27 +176,27 @@ locals {
 }
 
 
-module "profiling_scan" {
-  for_each         = local.profiling_to_scan
-  source           = "../../../custom_modules/dataplex_datascan/data-profiling"
-  project_id       = each.value.project_id
-  location         = var.location
-  data_scan_id     = "${replace(each.value.dataset, "_", "-")}-${replace(each.value.table, "_", "-")}-data-profile-scan"
-  display_name     = "${each.value.project_id} - ${each.value.dataset} - ${title(replace(each.value.table, "_", " "))} - Data Profile"
-  description      = "Automated daily profiling scan for ${each.value.dataset}.${each.value.table}"
-  labels           = merge(local.common_labels, { scan_type = "profiling" })
-  source_bq_table  = "//bigquery.googleapis.com/projects/${each.value.project_id}/datasets/${each.value.dataset}/tables/${each.value.table}"
-  results_bq_table = local.profile_results_table
-  schedule_cron    = null
-  sampling_percent = 100.0
-}
+#module "profiling_scan" {
+#  for_each         = local.profiling_to_scan
+#  source           = "../../../custom_modules/dataplex_datascan/data-profiling"
+#  project_id       = each.value.project_id
+#  location         = var.location
+#  data_scan_id     = "${replace(each.value.dataset, "_", "-")}-${replace(each.value.table, "_", "-")}-data-profile-scan"
+#  display_name     = "${each.value.project_id} - ${each.value.dataset} - ${title(replace(each.value.table, "_", " "))} - Data Profile"
+#  description      = "Automated daily profiling scan for ${each.value.dataset}.${each.value.table}"
+#  labels           = merge(local.common_labels, { scan_type = "profiling" })
+#  source_bq_table  = "//bigquery.googleapis.com/projects/${each.value.project_id}/datasets/${each.value.dataset}/tables/${each.value.table}"
+#  results_bq_table = local.profile_results_table
+#  schedule_cron    = null
+#  sampling_percent = 100.0
+#}
 
 
 module "dq_scan" {
   for_each         = local.custom_dq_to_scan
   source           = "../../../custom_modules/dataplex_datascan/data-quality"
   project_id       = each.value.project_id
-  location         = var.location
+  location         = each.value.location  # from CSV row
   data_scan_id     = "${replace(each.value.dataset, "_", "-")}-${replace(each.value.table, "_", "-")}-data-quality-scan"
   display_name     = "${each.value.project_id} - ${each.value.dataset} - ${title(replace(each.value.table, "_", " "))} - Data Quality"
   description      = "Automated daily DQ scan for ${each.value.dataset}.${each.value.table}"
