@@ -1,0 +1,3 @@
+project_id,location,dataset,table_name,rule_keys,schedule_cron,row_filter,sampling_percent,status
+vz-nonit-np-jyav-dev-dgsdo-0,us-east4,coe_tbls,vbg_wls_fwa_daily_cv,raw-table-has-data|customer-id-not-null|email-not-null,,,100,
+vz-nonit-np-jyav-dev-dgsdo-0,us-east4,coe_tbls,vbg_wls_daily_fcst,minimum-1000-rows|order-id-unique,,,100,

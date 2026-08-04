@@ -1,0 +1,24 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# Custom DQ Scan Cloud Run job configuration  —  Client Dev Environment
+# ──────────────────────────────────────────────────────────────────────────────
+
+# GCS bucket that stores the custom_dq.csv driver file
+gcs:
+  bucket_name: "jyav-dev-dgsdo-0-usre-gkcenrichment"
+  csv_blob: "custom_dq.csv"          # path within the bucket
+
+# Dataplex / BigQuery settings
+dataplex:
+  default_location: "us-east4"
+  service_account_email: "sa-dev-jyav-app-dgsdo-0@vz-nonit-np-jyav-dev-dgsdo-0.iam.gserviceaccount.com"
+
+  # Where DQ scan results are exported  (table must already exist in BQ)
+  results_bq_table: "//bigquery.googleapis.com/projects/vz-nonit-np-jyav-dev-dgsdo-0/datasets/gkc_governance_tbls/tables/data_quality_results"
+
+  # Optional: stream execution audit rows here  (leave empty "" to skip)
+  audit_bq_table: "vz-nonit-np-jyav-dev-dgsdo-0.gkc_governance_tbls.custom_dq_scan_audit"
+
+# Optional: impersonate a target SA.
+# Set target_sa to "" to use the Cloud Run job's own attached SA.
+impersonation:
+  target_sa: ""
